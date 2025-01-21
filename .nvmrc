@@ -1,0 +1,8 @@
+18.7.0
+#.nvmrc 是一個用於指定 Node Version Manager (NVM) 使用的 Node.js 版本的配置文件。當你在一個專案中使用 .nvmrc 文件時，它會告訴 nvm 這個專案需要使用哪一個版本的 Node.js。
+#nvm install
+#nvm use
+#node --version
+
+#npm 是用來管理 Node.js 包的工具。
+#nvm（Node Version Manager）是用來管理 Node.js 版本的工具。
