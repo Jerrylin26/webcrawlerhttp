@@ -19,7 +19,7 @@ dependencies：專案運行所需的核心依賴，會在應用程式部署到�
 */
 
 const { crawlPage } = require('./crawl.js')
-function main() {
+async function main() {
     if (process.argv.length < 3) {
         console.log('no website provived')
         process.exit(1)
@@ -36,8 +36,13 @@ function main() {
     */
 
     console.log(`starting crawl of ${baseURL}`)
-    crawlPage(baseURL)
+    //3個args 為 (baseURL, currentURL, pages)
+    const pages = await crawlPage(baseURL, baseURL, {})
 
+    // in : key value
+    for (const page of Object.entries(pages)) {
+        console.log(page)
+    }
 }
 
 
