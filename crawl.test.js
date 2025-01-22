@@ -1,5 +1,5 @@
 //是從 Jest 測試框架中導入 test 和 expect 這兩個函數，用於編寫測試案例和進行斷言。
-const { normalizeURL } = require('./crawl.js')
+const { normalizeURL, getURLsFromHTML } = require('./crawl.js')
 const { test, expect } = require('@jest/globals')
 /*
 'https://boot.dev' -> 'boot.dev'
@@ -37,6 +37,59 @@ test('normalizeURL strip http', () => {
     expect(actual).toEqual(expected)
 })
 
+test('getURLsFromHTML absolute', () => {
+    const inputHTMLBody = `
+        < html >
+            <body>
+                <a href="https://blog.boot.dev/path/">Blog</a>
+            </body>
+        </html >
+        `
+    const inputBaseURL = 'https://blog.boot.dev/'
+    const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL)
+    const expected = ['https://blog.boot.dev/path/']
+    expect(actual).toEqual(expected)
+})
 
+test('getURLsFromHTML relative', () => {
+    const inputHTMLBody = `
+        < html >
+            <body>
+                <a href="/path/">Blog</a>
+            </body>
+        </html >
+        `
+    const inputBaseURL = 'https://blog.boot.dev'
+    const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL)
+    const expected = ['https://blog.boot.dev/path/']
+    expect(actual).toEqual(expected)
+})
 
+test('getURLsFromHTML both ', () => {
+    const inputHTMLBody = `
+        < html >
+            <body>
+                <a href="https://blog.boot.dev/path1/">Blog Path1</a>
+                <a href="/path2/">Blog Path2</a>
+            </body>
+        </html >
+        `
+    const inputBaseURL = 'https://blog.boot.dev'
+    const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL)
+    const expected = ['https://blog.boot.dev/path1/', 'https://blog.boot.dev/path2/']
+    expect(actual).toEqual(expected)
+})
 
+test('getURLsFromHTML invalid', () => {
+    const inputHTMLBody = `
+        < html >
+            <body>
+                <a href="invalid">Invalid URL</a>
+            </body>
+        </html >
+        `
+    const inputBaseURL = 'https://blog.boot.dev'
+    const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL)
+    const expected = []
+    expect(actual).toEqual(expected)
+})
